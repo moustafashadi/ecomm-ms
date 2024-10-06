@@ -2,7 +2,7 @@ import express from 'express';
 import { 
     createUser, 
     loginUser , 
-    logoutCurrentUser, 
+    logoutCurrentUser,
     getAllUsers ,
     getCurrentUserProfile,
     updateCurrentUserProfile,
