@@ -11,9 +11,12 @@ const createUser = asyncHandler(async(req,res)=>{
         throw new Error('Please provide all the fields');
     }
     //if the user already exists, send a 400 status code and throw an error
-    const userExists = await User.findOne({email});
-    if (userExists) res.status(400).send("user already exists");
-
+    const userExists = await User.findOne({ $or: [{ email }, { username }] });
+    if (userExists) {
+        res.status(400);
+        throw new Error('User with the same email or username already exists');
+    }
+    
     //create salt
     const salt = await bcrypt.genSalt(10);
     //hash both the password and salt
