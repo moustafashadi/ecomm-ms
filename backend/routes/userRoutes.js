@@ -12,6 +12,7 @@ import {
 } from '../controllers/userController.js';
 const router = express.Router();
 import { authenticate, authorizeAdmin } from '../middlewares/authMiddleware.js';
+import { getCategory } from '../controllers/categoryController.js';
 
 router
     .route('/register')
@@ -31,10 +32,11 @@ router.route('/')
     .get(authenticate, authorizeAdmin, getAllUsers);
 
 
-//admin routes below
+//admin routes below to get, update, delete specific user
 router.route('/:id')
     .delete(authenticate, authorizeAdmin, deleteUserById)
     .get(authenticate, authorizeAdmin, getUserById)
     .put(authenticate, authorizeAdmin, updateUserById)
+
 
 export default router;

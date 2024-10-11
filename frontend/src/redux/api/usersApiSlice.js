@@ -1,6 +1,5 @@
 import { apiSlice } from "./apiSlice";
 import { USERS_URL } from "../features/constants";
-import Register from "../../pages/Auth/Register";
 
 export const userApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -50,7 +49,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 url: `${USERS_URL}/${userId}`,
                 method: 'GET'
             }),
-            keepUnusedDataFor: 5,
+            keepUnusedDataFor: 5, //The data will be kept in the cache for 5 seconds
         }),
         updateUser: builder.mutation({
             query: (data) => ({
@@ -58,7 +57,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: 'PUT',
                 body: data
             }),
-            invalidatesTags: ['User']
+            invalidatesTags: ['User'] //This will invalidate the cache for the `User` tag
         }),
     }),
 });

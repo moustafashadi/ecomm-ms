@@ -22,6 +22,35 @@ const UserList = () => {
         refetch();
     }, [refetch]);
 
+    const deleteHandler = async (id) => {
+        if (window.confirm("Are you sure?")) {
+            try {
+                await deleteUser(id).unwrap();
+                refetch();
+                toast.success("User deleted successfully");
+            } catch (error) {
+                toast.error(error?.data?.message || error.message);
+            }
+        }
+    }
+
+    const editHandler = (id, username, email) => {
+        setEditableUserId(id);
+        setEditableUsername(username);
+        setEditableEmail(email);
+    }
+
+    const updateHandler = async (id) => {
+        try {
+            await updateUser({userId: id, username: editableUsername, email: editableEmail }).unwrap();
+            setEditableUserId(null);
+            refetch();
+            toast.success("User updated successfully");
+        } catch (error) {
+            toast.error(error?.data?.message || error.message);
+        }
+    }
+
     return (
         <div className="p-4">
             <h1 className="text-2xl font-semibold mb-4 ml-[4rem]">Users</h1>
@@ -55,7 +84,7 @@ const UserList = () => {
                                                         type="text"
                                                         value={editableUsername}
                                                         onChange={(e) => setEditableUsername(e.target.value)}
-                                                        className="p-2 border rounded-lg w-full"
+                                                        className="p-2 border text-black rounded-lg w-full"
                                                     />
                                                     <button
                                                         onClick={() => updateHandler(user._id)}
@@ -83,7 +112,7 @@ const UserList = () => {
                                                         type="text"
                                                         value={editableEmail}
                                                         onChange={(e) => setEditableEmail(e.target.value)}
-                                                        className="p-2 border rounded-lg w-full"
+                                                        className="p-2 border text-black rounded-lg w-full"
                                                     />
                                                     <button
                                                         onClick={() => updateHandler(user._id)}
