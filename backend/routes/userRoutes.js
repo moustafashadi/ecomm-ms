@@ -12,7 +12,6 @@ import {
 } from '../controllers/userController.js';
 const router = express.Router();
 import { authenticate, authorizeAdmin } from '../middlewares/authMiddleware.js';
-import { getCategory } from '../controllers/categoryController.js';
 
 router
     .route('/register')

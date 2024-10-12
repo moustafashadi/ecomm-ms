@@ -9,9 +9,9 @@ import {
     getCategory
 } from '../controllers/categoryController.js';
 
-// Create a category (admin only)
+
 router.route('/')
-    .post(authenticate, authorizeAdmin, createCategory)
+    .post(authenticate, authorizeAdmin, createCategory) // Create a category (admin only)
     .get(listCategories); // List all categories, no authentication needed
 
 // Get, update, or delete a category by ID

@@ -1,88 +1,79 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import Category from "../models/categoryModel.js";
 
+// Create a new category
 const createCategory = asyncHandler(async (req, res) => {
-    try{
-        const {name} = req.body;
-        if(!name?.trim()){
-            return res.json({error: "Category name is required"});
-        }
-        
-        const existingCategory = await Category.findOne({name})
-        if(existingCategory){
-            return res.json({error: "Category already exists"});
-        }
+  const { name } = req.body;
 
-        const category = await new Category({name}).save();
-        res.json(category);
+  // Check if the name is provided and not empty
+  if (!name?.trim()) {
+    return res.status(400).json({ error: "Category name is required" });
+  }
 
-    } catch(error){
-        console.error(error);
-        res.status(400).json(error);
-    }
+  // Check if the category already exists
+  const existingCategory = await Category.findOne({ name });
+  if (existingCategory) {
+    return res.status(400).json({ error: "Category already exists" });
+  }
+
+  // Create and save the new category
+  const category = await new Category({ name }).save();
+  res.status(201).json(category);
 });
 
+// Update an existing category
 const updateCategory = asyncHandler(async (req, res) => {
-    try {
-        const {name} = req.body;
-        const categoryId = req.params.id;
+  const { name } = req.body;
+  const categoryId = req.params.id;
 
-        const category = await Category.findById(categoryId);
+  // Find the category by ID
+  const category = await Category.findById(categoryId);
+  if (!category) {
+    return res.status(404).json({ error: "Category not found" });
+  }
 
-        if(!category){
-            return res.status(404).json({error: "Category not found"});
-        }
-
-        category.name = name;
-        const updatedCategory = await category.save();
-        res.json(updatedCategory);
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: error.message});
-    }
+  // Update the category name and save
+  category.name = name;
+  const updatedCategory = await category.save();
+  res.status(200).json(updatedCategory);
 });
 
+// Delete a category
 const deleteCategory = asyncHandler(async (req, res) => {
-    try {
-        const categoryId = req.params.id;
-        const category = await Category.findById(categoryId);
+  const categoryId = req.params.id;
 
-        if (!category) {
-            return res.status(404).json({ message: "Category not found" });
-        }
+  // Find the category by ID
+  const category = await Category.findById(categoryId);
+  if (!category) {
+    return res.status(404).json({ message: "Category not found" });
+  }
 
-        await category.deleteOne({ _id: category._id });
-        res.json({ message: "Category removed" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: error.message });
-    }
+  // Delete the category
+  await category.deleteOne();
+  res.status(204).json({ message: "Category removed" });
 });
 
-const listCategories = asyncHandler(async(req, res) =>{
-    try {
-        const categories = await Category.find({});
-        res.json(categories);
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({message: error.message});
-    }
+// List all categories
+const listCategories = asyncHandler(async (req, res) => {
+  const categories = await Category.find({});
+  res.status(200).json(categories);
 });
 
-const getCategory = asyncHandler(async(req, res) =>{
-    try {
-        const category = await Category.findOne({_id: req.params.id});
-        if(!category){
-            return res.status(404).json({message: "Category not found"});
-        } else{
-            res.json(category);
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({message: error.message});
-    }
+// Get a single category by ID
+const getCategory = asyncHandler(async (req, res) => {
+  const category = await Category.findById(req.params.id);
+
+  if (!category) {
+    return res.status(404).json({ message: "Category not found" });
+  }
+
+  res.status(200).json(category);
 });
 
-
-export { createCategory, updateCategory, deleteCategory, listCategories, getCategory };
+export {
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  listCategories,
+  getCategory,
+};
