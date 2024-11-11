@@ -1,9 +1,10 @@
 import express from "express";
 import ExpressFormidable from "express-formidable";
 const router = express.Router();
-import {checkId} from "../middlewares/checkId";
-import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware";
+import { addProduct } from "../controllers/ProductController.js";
+import {checkId} from "../middlewares/checkId.js";
+import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
-
+router.post("/", authenticate, authorizeAdmin, ExpressFormidable(), addProduct);
 
 export default router;

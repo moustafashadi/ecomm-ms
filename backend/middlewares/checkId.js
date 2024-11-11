@@ -8,4 +8,4 @@ function checkId(req, res, next) {
   next();
 }
 
-export default checkId;
+export {checkId};
