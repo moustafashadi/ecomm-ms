@@ -18,21 +18,27 @@ const Login = () => {
   const [Login, { isLoading, error }] = useLoginMutation();
 
   const { userInfo } = useSelector(state => state.auth)
+  
+  //represents the current URL and is immutable. 
   const { search } = useLocation();
+  
   const searchParams = new URLSearchParams(search);
+
   const redirect = searchParams.get('redirect') || '/';
 
   useEffect(() => {
-    if (userInfo) {
-      navigate(redirect);
-    }
+    if (userInfo) { navigate(redirect);}
   }, [navigate, redirect, userInfo])
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      //will return a new Promise that either has the actual action,
+      //payload value from a fulfilled action, or throws an error if it's the rejected action. 
       const result = await Login({ email, password }).unwrap();
+
       dispatch(setCredentials(result));
+      
       navigate(redirect);
     } catch (error) {
       const errorMessage = error?.data?.detail || error?.message || "An unexpected error occurred";

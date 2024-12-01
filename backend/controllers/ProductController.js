@@ -110,7 +110,6 @@ const getProducts = asyncHandler(async (req, res) => {
 });
 
 //FETCHES A PRODUCT BY ID
-
 const getProduct = asyncHandler(async (req, res) => {
     try {
         const { id } = req.params;

@@ -8,6 +8,7 @@ import Switch from './components/themeToggle';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
